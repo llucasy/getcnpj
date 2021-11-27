@@ -63,3 +63,19 @@ export async function getCNPJ(cidade) {
   return links
 
 }
+
+export async function validatecnpj(cnpj) {
+  const page = await getPage();
+
+  await page.goto(`https://cnpj.biz/${cnpj}`, { waitUntil: "networkidle2" });
+  const dataOfCNPJ = await page.evaluate(() => {
+    const arr = []
+    document.querySelectorAll('.row p').forEach((e, i, a) => {
+      arr.push(a[i].innerText)
+    })
+
+    return { arr }
+  })
+
+  return dataOfCNPJ
+}
